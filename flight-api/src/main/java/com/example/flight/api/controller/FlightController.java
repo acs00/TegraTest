@@ -31,23 +31,21 @@ public class FlightController {
 		InputStream inputStream = TypeReference.class.getResourceAsStream("/json/99Planes.json");
 		ObjectMapper mapper = new ObjectMapper();
 		List<NinetyNinePlanes> ninetyList = mapper.readValue(inputStream, ninetyType);
-		System.out.print(ninetyList);
 		List<UberAir> uberList = new ArrayList<>();
-		try (CSVReader csvReader = new CSVReader(new FileReader("/csv/uberAir.csv"));) {
+		try (CSVReader csvReader = new CSVReader(new FileReader("src/main/resources/csv/uberAir.csv"));) {
 		    String[] values = null;
+		    int i = 0;
 		    while ((values = csvReader.readNext()) != null) {
-		    	List<String> list = Arrays.asList(values);
-		    	UberAir uberAir = new UberAir(list.get(0), list.get(1), list.get(2), list.get(3), list.get(4), list.get(5),
-		    			Double.valueOf(list.get(7)));
-		    	uberList.add(uberAir);
-//		        records.add(Arrays.asList(values));
+		    	if (i > 0) {
+		    		String[] value = values[0].split("[ \t]");
+			    	UberAir uberAir = new UberAir(value[0], value[1], value[2], value[3], value[4], value[5],
+			    			Double.valueOf(value[6]));
+			    	uberList.add(uberAir);
+		    	}
+		    	i++;
 		    }
 		}
-//		TypeReference<List<UberAir>> uberType = new TypeReference<List<UberAir>>() {};
-//		inputStream = TypeReference.class.getResourceAsStream("/csv/uberAir.csv");
-//		mapper = new ObjectMapper();
-//		List<UberAir> uberList = mapper.readValue(inputStream, uberType);
-		System.out.print(uberList);
+		
 	}
 
 	@GetMapping
